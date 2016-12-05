@@ -1,0 +1,118 @@
+#include <iostream>
+#include <string>
+#include <sstream>
+using namespace std;
+// Nilda Borrero C++ Class Fraction to construct 
+// method for Greatest Common Denominator as a fraction where user inputs a/b 
+class Fraction {
+private:
+	int numerator;
+	int denominator;
+
+	//using a private method just inside the function
+	int GCD() {
+		int a = numerator;
+		int b = denominator;
+
+		int remainder = a%b;
+		while (remainder != 0) {
+			a = b;
+			b = remainder;
+			remainder = a%b;
+		}
+		return b;
+	}
+public:
+	// public constructors 
+	//a constructor is a method with the same name as the class
+	//it is called when an object is constructed
+	//default constructor is a method without arguments
+	Fraction() {
+		cout << "calling default constructor \n";
+		numerator = 0;
+		denominator = 2;
+	}
+	//A constructor that accepts the numerator and denominator
+	Fraction(int num, int den) {
+		cout << "calling Fraction(int, int) \n";
+		numerator = num;
+		denominator = den;
+	}
+	Fraction(int num) {
+		cout << "calling Fraction(int) \n";
+		numerator = num;
+		denominator = 1;
+	}
+	//mutators
+	void setNumerator(int a) {
+		numerator = a;
+	}
+	void setDenomintor(int a) {
+		denominator = a;
+	}
+	//change both
+	void setFraction(int a, int b) {
+		numerator = a;
+		denominator = b;
+	}
+	//accessors
+	int getNumerator() const {
+		return numerator;
+	}
+	int getDenominator() const {
+		return denominator;
+	}
+	//read fraction from the user
+	void read() {
+		cout << "enter fraction in form a/b:";
+		char temp;
+		cin >> numerator >> temp >> denominator;
+	}
+	//display in form a/b
+	void display() {
+		cout << numerator << "/" << denominator << endl;
+	}
+	void reduce() {
+		//find GCD for numerator denominator
+		int g = GCD();
+		numerator = numerator / g;
+		denominator = denominator / g;
+	}
+	string toString() {
+		//should return the fraction as a string
+		ostringstream oss;
+		oss << numerator << "/" << denominator;
+		string st = oss.str();
+		return st;
+	}
+	//filled in these methods
+	//added a fraction to current fraction
+	Fraction Add(const Fraction &right) const {
+		Fraction result;
+		result.setNumerator(numerator*right.getDenominator() + right.getNumerator() *denominator);
+		result.setDenomintor(denominator*right.getDenominator());
+		result.reduce();
+		return result;
+	}
+};
+
+int main() {
+	//declare a Fraction initalize it to 2/5
+	Fraction frac;
+	frac.read();
+	cout << "frac = ";
+	frac.display();
+	cout << endl;
+	frac.reduce();
+	cout << "after reduce() frac = ";
+	frac.display();
+	//fraction 4/12
+	Fraction frac1(4, 12);
+	cout << "frac1 = " << frac1.toString() << endl;
+	//fraction 11
+	Fraction frac2(11);
+	cout << "frac2 = " << frac2.toString() << endl;
+	Fraction F3 = frac1.Add(frac2);
+	cout << "F3 = " << F3.toString() << endl;
+	return 0;
+}
